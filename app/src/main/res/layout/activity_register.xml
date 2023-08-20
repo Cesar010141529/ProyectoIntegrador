@@ -61,18 +61,28 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/register_username"
+                android:id="@+id/cct"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="56dp"
                 android:layout_marginRight="20dp"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
+                android:hint="@string/cct"
                 android:selectAllOnFocus="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/register_username"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true" />
 
             <EditText
                 android:id="@+id/register_password"

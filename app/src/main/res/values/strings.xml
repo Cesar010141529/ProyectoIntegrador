@@ -17,6 +17,7 @@
     <string name="register_user">¿Aún no te has registrado?</string>
 
     <string name="register_title">Agregar usuario</string>
+    <string name="cct">CCT (10 caracteres)</string>
     <string name="action_register">Agregar</string>
     <string name="action_cancel">Cancelar</string>
 
@@ -48,4 +49,8 @@
 
     <string name="back_btn">Regresar</string>
     <string name="save_btn">Guardar</string>
+
+    <string name="finish_title">Finalizar captura</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_remove">Eliminar</string>
 </resources>

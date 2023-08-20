@@ -1,20 +1,19 @@
 package integrador.a010141529.proyectointegrador
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.util.Log
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Users
 import integrador.a010141529.proyectointegrador.ui.login.LoginFormState
@@ -47,54 +46,77 @@ class OwnLogin : AppCompatActivity() {
         }
 
         loginBtn.setOnClickListener {
-            val dbHelper = TbcDbHelper(baseContext)
-            val db = dbHelper.writableDatabase
-            val projection = arrayOf(
-                BaseColumns._ID,
-                Users.USERNAME,
-                Users.PASSWORD)
-            val selection = "${Users.USERNAME} = ? and ${Users.PASSWORD} = ?"
-            val selectionArgs = arrayOf(username.text.toString(), password.text.toString())
-            val cursor = db.query(
-                Users.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-            )
-            val userFound = cursor.count
-            cursor.close()
+            val db = Firebase.firestore
+            var exists = false
+            var isError = false
+            db.collection(Users.TABLE_NAME)
+                .whereEqualTo(Users.USERNAME, username.text.toString())
+                .whereEqualTo(Users.PASSWORD, password.text.toString())
+                .get()
+                .addOnSuccessListener { result ->
+                    exists = result.count() == 1
+                    if (exists) {
+                        val dbHelper = TbcDbHelper(baseContext)
+                        val dbLocal = dbHelper.writableDatabase
+                        val projection = arrayOf(BaseColumns._ID, Users.USERNAME)
+                        val selection = "${Users.USERNAME} = ?"
+                        val selectionArgs = arrayOf(username.text.toString())
+                        val cursor = dbLocal.query(
+                            Users.TABLE_NAME,
+                            projection,
+                            selection,
+                            selectionArgs,
+                            null,
+                            null,
+                            null
+                        )
+                        val userFound = cursor.count
+                        cursor.close()
 
-            if (userFound == 1) {
-                val values = ContentValues().apply {
-                    put(Users.LOGGED, true)
+                        if (userFound == 1) {
+                            val values = ContentValues().apply {
+                                put(Users.IS_LOGGED, true)
+                            }
+                            val selection = "${Users.USERNAME} = ?"
+                            val selectionArgs = arrayOf(username.text.toString())
+                            val rowsModified = dbLocal.update(
+                                Users.TABLE_NAME, values, selection, selectionArgs
+                            )
+                        } else {
+                            val values = ContentValues().apply {
+                                put(Users.USERNAME, username.text.toString())
+                                put(Users.IS_LOGGED, true)
+                            }
+                            val newRowId = dbLocal?.insert(Users.TABLE_NAME, null, values)
+                        }
+                        val userRef = db.collection(Users.TABLE_NAME).document(username.text.toString())
+                        userRef.update(Users.IS_LOGGED, true)
+                            .addOnSuccessListener {
+                                val welcome = "¡Bienvenido!"
+                                val displayName = username.text.toString()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "$welcome $displayName",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("FIREBASE", "Error", e)
+                            }
+                    }  else {
+                        Toast.makeText(
+                            applicationContext,
+                            "El usuario y/o la contraseña son inválidos",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                val selection = "${Users.USERNAME} = ?"
-                val selectionArgs = arrayOf(username.text.toString())
-                val rowsModified = db.update(
-                    Users.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs
-                )
-                val welcome = "¡Bienvenido!"
-                val displayName = username.text.toString()
-                Toast.makeText(
-                    applicationContext,
-                    "$welcome $displayName",
-                    Toast.LENGTH_LONG
-                ).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(
-                    applicationContext,
-                    "El usuario y/o la contraseña son inválidos",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+                .addOnFailureListener {exception ->
+                    Log.w("FIREBASE", "Error.", exception)
+                    isError = true
+                }
         }
     }
 
