@@ -16,7 +16,6 @@ import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContra
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.DatosEquipamiento
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.DatosInfraestructura
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Users
-import integrador.a010141529.proyectointegrador.ui.login.LoginActivity
 
 
 class SaveAllActivity : AppCompatActivity() {
@@ -207,7 +206,7 @@ class SaveAllActivity : AppCompatActivity() {
                 null
             )
 
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, OwnLogin::class.java)
             startActivity(intent)
         }
     }

@@ -16,7 +16,6 @@ import integrador.a010141529.proyectointegrador.data.model.Academicos
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.DatosAcademicos
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Users
-import integrador.a010141529.proyectointegrador.ui.login.LoginActivity
 
 class AcademicosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +114,7 @@ class AcademicosActivity : AppCompatActivity() {
                 null
             )
 
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, OwnLogin::class.java)
             startActivity(intent)
         }
 

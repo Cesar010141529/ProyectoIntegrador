@@ -17,7 +17,6 @@ import integrador.a010141529.proyectointegrador.data.model.Equipamiento
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.DatosEquipamiento
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Users
-import integrador.a010141529.proyectointegrador.ui.login.LoginActivity
 import java.io.File
 
 class EquipamientoActivity : AppCompatActivity() {
@@ -191,7 +190,7 @@ class EquipamientoActivity : AppCompatActivity() {
                 null
             )
 
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, OwnLogin::class.java)
             startActivity(intent)
         }
 

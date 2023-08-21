@@ -18,7 +18,6 @@ import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.DatosInfraestructura
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Infraestructura
 import integrador.a010141529.proyectointegrador.data.model.TbcDbHelper.TbcContract.Users
-import integrador.a010141529.proyectointegrador.ui.login.LoginActivity
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
